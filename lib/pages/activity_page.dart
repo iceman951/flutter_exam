@@ -4,6 +4,7 @@ import 'package:flutter_exam_mid/boxes.dart';
 import 'package:flutter_exam_mid/models/activity.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:intl/intl.dart';
 
 class ActivityPage extends StatefulWidget {
   @override
@@ -55,7 +56,7 @@ class _ActivityPageState extends State<ActivityPage> {
         children: [
           SizedBox(height: 24),
           Text(
-            'Net Expense: ',
+            'Last Time: ',
             style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 20,
@@ -95,7 +96,7 @@ class _ActivityPageState extends State<ActivityPage> {
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
         ),
         trailing: Text(
-          'page',
+          DateFormat('dd-MM-yyyy – kk:mm').format(activity.createdDate),
           style: TextStyle(
               color: color, fontWeight: FontWeight.bold, fontSize: 16),
         ),
@@ -116,10 +117,8 @@ class _ActivityPageState extends State<ActivityPage> {
                 MaterialPageRoute(
                   builder: (context) => ActivityDialog(
                     activity: activity,
-                    onClickedDone: (name, category) => editActivity(
-                      activity,
-                      name,
-                    ),
+                    onClickedDone: (name, category) =>
+                        editActivity(activity, name, category),
                   ),
                 ),
               ),
@@ -144,11 +143,9 @@ class _ActivityPageState extends State<ActivityPage> {
     box.add(activity);
   }
 
-  void editActivity(
-    Activity activity,
-    String name,
-  ) {
+  void editActivity(Activity activity, String name, String category) {
     activity.name = name;
+    activity.category = category;
 
     activity.save();
   }
