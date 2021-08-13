@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_exam_mid/activity_dialog.dart';
+import 'package:flutter_exam_mid/widgets/activity_dialog.dart';
 import 'package:flutter_exam_mid/boxes.dart';
 import 'package:flutter_exam_mid/models/activity.dart';
 import 'package:flutter_exam_mid/models/history.dart';
-import 'package:flutter_exam_mid/widgets/dropdown_category.dart';
+import 'package:flutter_exam_mid/widgets/last_time_dialog.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/intl.dart';
@@ -201,6 +201,18 @@ class _ActivityPageState extends State<ActivityPage> {
                 addHistory(DateTime.now(), activity),
                 Navigator.pushNamed(context, '/history_page')
               },
+            ),
+          ),
+          Expanded(
+            child: TextButton.icon(
+              label: Text('Last Time'),
+              icon: Icon(Icons.history_toggle_off_sharp),
+              onPressed: () => showDialog(
+                context: context,
+                builder: (context) => LastTimeDialog(
+                  onClickedDone: (String name, String categoty) {},
+                ),
+              ),
             ),
           )
         ],
