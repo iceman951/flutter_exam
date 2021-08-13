@@ -3,7 +3,7 @@ import 'package:flutter_exam_mid/models/activity.dart';
 
 class ActivityDialog extends StatefulWidget {
   final Activity? activity;
-  final Function(String name) onClickedDone;
+  final Function(String name, String categoty) onClickedDone;
 
   const ActivityDialog({
     Key? key,
@@ -18,6 +18,7 @@ class ActivityDialog extends StatefulWidget {
 class _ActivityDialogState extends State<ActivityDialog> {
   final formKey = GlobalKey<FormState>();
   final nameController = TextEditingController();
+  final categoryController = TextEditingController();
 
   @override
   void initState() {
@@ -27,13 +28,14 @@ class _ActivityDialogState extends State<ActivityDialog> {
       final activity = widget.activity!;
 
       nameController.text = activity.name;
+      categoryController.text = activity.category;
     }
   }
 
   @override
   void dispose() {
     nameController.dispose();
-
+    categoryController.dispose();
     super.dispose();
   }
 
@@ -76,14 +78,15 @@ class _ActivityDialogState extends State<ActivityDialog> {
       );
 
   Widget buildCategory() => TextFormField(
-        controller: nameController,
+        controller: categoryController,
         decoration: InputDecoration(
           border: OutlineInputBorder(),
           hintText: 'Enter Category',
         ),
-        validator: (name) =>
-            name != null && name.isEmpty ? 'Enter a name' : null,
+        validator: (category) =>
+            category != null && category.isEmpty ? 'Enter a category' : null,
       );
+
   Widget buildCancelButton(BuildContext context) => TextButton(
         child: Text('Cancel'),
         onPressed: () => Navigator.of(context).pop(),
@@ -99,8 +102,9 @@ class _ActivityDialogState extends State<ActivityDialog> {
 
         if (isValid) {
           final name = nameController.text;
+          final category = categoryController.text;
 
-          widget.onClickedDone(name);
+          widget.onClickedDone(name, category);
 
           Navigator.of(context).pop();
         }

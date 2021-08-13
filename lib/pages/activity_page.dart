@@ -42,13 +42,104 @@ class _ActivityPageState extends State<ActivityPage> {
         ),
       );
 
-  
+  Widget buildContent(List<Activity> activities) {
+    if (activities.isEmpty) {
+      return Center(
+        child: Text(
+          'No Activity!',
+          style: TextStyle(fontSize: 24),
+        ),
+      );
+    } else {
+      return Column(
+        children: [
+          SizedBox(height: 24),
+          Text(
+            'Net Expense: ',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 20,
+              color: Colors.blue,
+            ),
+          ),
+          SizedBox(height: 24),
+          Expanded(
+            child: ListView.builder(
+              padding: EdgeInsets.all(8),
+              itemCount: activities.length,
+              itemBuilder: (BuildContext context, int index) {
+                final activity = activities[index];
 
-  Future addActivity(String name) async {
+                return buildActivity(context, activity);
+              },
+            ),
+          ),
+        ],
+      );
+    }
+  }
+
+  Widget buildActivity(
+    BuildContext context,
+    Activity activity,
+  ) {
+    final color = Colors.green;
+
+    return Card(
+      color: Colors.white,
+      child: ExpansionTile(
+        tilePadding: EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+        title: Text(
+          activity.name,
+          maxLines: 2,
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+        ),
+        trailing: Text(
+          'page',
+          style: TextStyle(
+              color: color, fontWeight: FontWeight.bold, fontSize: 16),
+        ),
+        children: [
+          buildButtons(context, activity),
+        ],
+      ),
+    );
+  }
+
+  Widget buildButtons(BuildContext context, Activity activity) => Row(
+        children: [
+          Expanded(
+            child: TextButton.icon(
+              label: Text('Edit'),
+              icon: Icon(Icons.edit),
+              onPressed: () => Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => ActivityDialog(
+                    activity: activity,
+                    onClickedDone: (name, category) => editActivity(
+                      activity,
+                      name,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          Expanded(
+            child: TextButton.icon(
+              label: Text('Delete'),
+              icon: Icon(Icons.delete),
+              onPressed: () => deleteActivity(activity),
+            ),
+          )
+        ],
+      );
+
+  Future addActivity(String name, String category) async {
     final activity = Activity()
       ..name = name
-      ..createdDate = DateTime.now();
-
+      ..createdDate = DateTime.now()
+      ..category = category;
     final box = Boxes.getActivities();
     box.add(activity);
   }
