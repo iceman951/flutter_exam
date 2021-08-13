@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_exam_mid/pages/home.dart';
+import 'package:flutter_exam_mid/pages/list_page.dart';
 import 'package:flutter_exam_mid/pages/second_page.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -26,6 +27,7 @@ class MyApp extends StatelessWidget {
       routes: <String, WidgetBuilder>{
         '/': (context) => Home(),
         '/second_page': (context) => SecondPage(),
+        '/list_page': (context) => ListPage(),
       },
     );
   }
