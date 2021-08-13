@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_exam_mid/pages/home.dart';
+import 'package:flutter_exam_mid/models/activity.dart';
+import 'package:flutter_exam_mid/pages/activity_page.dart';
 import 'package:flutter_exam_mid/pages/list_page.dart';
 import 'package:flutter_exam_mid/pages/second_page.dart';
 import 'package:hive/hive.dart';
@@ -9,8 +10,8 @@ Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
 
-  // Hive.registerAdapter();
-  // await Hive.openBox<>('transactions');
+  Hive.registerAdapter(ActivityAdapter());
+  await Hive.openBox<Activity>('activities');
 
   runApp(MyApp());
 }
@@ -26,10 +27,9 @@ class MyApp extends StatelessWidget {
         brightness: Brightness.light,
         primarySwatch: Colors.blue,
       ),
-      // home: HomePage(),
+      home: ActivityPage(),
       initialRoute: '/',
       routes: <String, WidgetBuilder>{
-        '/': (context) => Home(),
         '/second_page': (context) => SecondPage(),
         '/list_page': (context) => ListPage(),
       },
