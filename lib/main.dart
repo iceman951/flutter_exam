@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_exam_mid/models/activity.dart';
+import 'package:flutter_exam_mid/models/history.dart';
 import 'package:flutter_exam_mid/pages/activity_page.dart';
 import 'package:flutter_exam_mid/pages/list_page.dart';
-import 'package:flutter_exam_mid/pages/second_page.dart';
+import 'package:flutter_exam_mid/pages/history_page.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
@@ -11,8 +12,9 @@ Future main() async {
   await Hive.initFlutter();
 
   Hive.registerAdapter(ActivityAdapter());
+  Hive.registerAdapter(HistoryAdapter());
   await Hive.openBox<Activity>('activities');
-
+  await Hive.openBox<History>('histories');
   runApp(MyApp());
 }
 
@@ -30,7 +32,7 @@ class MyApp extends StatelessWidget {
       home: ActivityPage(),
       initialRoute: '/',
       routes: <String, WidgetBuilder>{
-        '/second_page': (context) => SecondPage(),
+        '/history_page': (context) => HistoryPage(),
         '/list_page': (context) => ListPage(),
       },
     );

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_exam_mid/activity_dialog.dart';
 import 'package:flutter_exam_mid/boxes.dart';
 import 'package:flutter_exam_mid/models/activity.dart';
+import 'package:flutter_exam_mid/models/history.dart';
+import 'package:flutter_exam_mid/widgets/dropdown_category.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/intl.dart';
@@ -61,20 +63,21 @@ class _ActivityPageState extends State<ActivityPage> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                Container(
-                  height: 40,
-                  width: 160,
-                  child: TextField(
-                    controller: searchController,
-                    onChanged: (value) {
-                      setState(() {
-                        searchController.text = value;
-                      });
-                    },
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(), hintText: 'Search'),
-                  ),
-                ),
+                // Container(
+                //   height: 40,
+                //   width: 160,
+                //   child: TextField(
+                //     controller: searchController,
+                //     onChanged: (value) {
+                //       setState(() {
+                //         searchController.text = value;
+                //       });
+                //     },
+                //     decoration: InputDecoration(
+                //         border: OutlineInputBorder(), hintText: 'Search'),
+                //   ),
+                // ),
+                CategoryBar(),
                 SizedBox(
                   width: 20,
                 ),
@@ -157,6 +160,16 @@ class _ActivityPageState extends State<ActivityPage> {
               icon: Icon(Icons.delete),
               onPressed: () => deleteActivity(activity),
             ),
+          ),
+          Expanded(
+            child: TextButton.icon(
+              label: Text('Done'),
+              icon: Icon(Icons.done),
+              onPressed: () => {
+                addHistory(DateTime.now(), activity),
+                Navigator.pushNamed(context, '/history_page')
+              },
+            ),
           )
         ],
       );
@@ -179,5 +192,13 @@ class _ActivityPageState extends State<ActivityPage> {
 
   void deleteActivity(Activity activity) {
     activity.delete();
+  }
+
+  Future addHistory(DateTime createdDate, Activity activity) async {
+    final history = History()
+      ..createdDate = DateTime.now()
+      ..activity = activity;
+    final box = Boxes.getHistories();
+    box.add(history);
   }
 }
