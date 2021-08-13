@@ -5,22 +5,37 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
 
-class HistoryPage extends StatelessWidget {
+class HistoryPage extends StatefulWidget {
+  @override
+  _HistoryPageState createState() => _HistoryPageState();
+}
+
+class _HistoryPageState extends State<HistoryPage> {
+  late bool _sortDate;
+  void initState() {
+    _sortDate = true;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('History'),
-      ),
-      body: ValueListenableBuilder<Box<History>>(
-        valueListenable: Boxes.getHistories().listenable(),
-        builder: (context, box, _) {
-          final histories = box.values.toList().cast<History>();
+        appBar: AppBar(
+          title: const Text('History'),
+        ),
+        body: ValueListenableBuilder<Box<History>>(
+          valueListenable: Boxes.getHistories().listenable(),
+          builder: (context, box, _) {
+            final histories = box.values.toList().cast<History>();
 
-          return buildContent(histories);
-        },
-      ),
-    );
+            return buildContent(histories);
+          },
+        ),
+        floatingActionButton: FloatingActionButton(
+            child: Icon(Icons.sort),
+            onPressed: () => {
+                  setState(() => {_sortDate = !_sortDate})
+                }));
   }
 
   Widget buildContent(List<History> histories) {
@@ -40,6 +55,19 @@ class HistoryPage extends StatelessWidget {
               padding: EdgeInsets.all(8),
               itemCount: histories.length,
               itemBuilder: (BuildContext context, int index) {
+                if (_sortDate) {
+                  histories.sort((a, b) {
+                    var adate = a.createdDate;
+                    var bdate = b.createdDate;
+                    return adate.compareTo(bdate);
+                  });
+                } else {
+                  histories.sort((b, a) {
+                    var adate = a.createdDate;
+                    var bdate = b.createdDate;
+                    return adate.compareTo(bdate);
+                  });
+                }
                 final history = histories[index];
 
                 return buildHistory(context, history);

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_exam_mid/models/activity.dart';
 import 'package:flutter_exam_mid/models/history.dart';
 import 'package:flutter_exam_mid/pages/activity_page.dart';
-import 'package:flutter_exam_mid/pages/list_page.dart';
 import 'package:flutter_exam_mid/pages/history_page.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -23,7 +22,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'FrozenCodeMobile Demo',
+      title: 'Flutter Demo',
       theme: ThemeData(
         // is not restarted.
         brightness: Brightness.light,
@@ -33,7 +32,6 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: <String, WidgetBuilder>{
         '/history_page': (context) => HistoryPage(),
-        '/list_page': (context) => ListPage(),
       },
     );
   }

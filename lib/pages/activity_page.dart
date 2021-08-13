@@ -14,8 +14,7 @@ class ActivityPage extends StatefulWidget {
 }
 
 class _ActivityPageState extends State<ActivityPage> {
-  final searchController = TextEditingController();
-
+  String dropdownValue = 'Categories';
   @override
   void dispose() {
     Hive.close();
@@ -32,8 +31,20 @@ class _ActivityPageState extends State<ActivityPage> {
           valueListenable: Boxes.getActivities().listenable(),
           builder: (context, box, _) {
             final activities = box.values.toList().cast<Activity>();
-
-            return buildContent(activities);
+            if (dropdownValue == 'Bill') {
+              final billActivities =
+                  activities.where((it) => it.category == 'Bill').toList();
+              return buildContent(billActivities);
+            } else if (dropdownValue == 'HomeWork') {
+              final homeWorkActivities =
+                  activities.where((it) => it.category == 'HomeWork').toList();
+              return buildContent(homeWorkActivities);
+            } else if (dropdownValue == 'Event') {
+              final eventActivities =
+                  activities.where((it) => it.category == 'Event').toList();
+              return buildContent(eventActivities);
+            } else
+              return buildContent(activities);
           },
         ),
         floatingActionButton: FloatingActionButton(
@@ -49,12 +60,25 @@ class _ActivityPageState extends State<ActivityPage> {
 
   Widget buildContent(List<Activity> activities) {
     if (activities.isEmpty) {
-      return Center(
-        child: Text(
-          'No Activity!',
-          style: TextStyle(fontSize: 24),
+      return Column(children: [
+        Container(
+          margin: EdgeInsets.all(20),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              buildDropdown(context),
+              SizedBox(
+                width: 20,
+              ),
+              FloatingActionButton(
+                  child: Icon(Icons.history),
+                  onPressed: () =>
+                      Navigator.pushNamed(context, '/history_page'))
+            ],
+          ),
         ),
-      );
+        Center(child: Text('No Avtivity', style: TextStyle(fontSize: 24)))
+      ]);
     } else {
       return Column(
         children: [
@@ -63,33 +87,15 @@ class _ActivityPageState extends State<ActivityPage> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                // Container(
-                //   height: 40,
-                //   width: 160,
-                //   child: TextField(
-                //     controller: searchController,
-                //     onChanged: (value) {
-                //       setState(() {
-                //         searchController.text = value;
-                //       });
-                //     },
-                //     decoration: InputDecoration(
-                //         border: OutlineInputBorder(), hintText: 'Search'),
-                //   ),
-                // ),
-                CategoryBar(),
+                buildDropdown(context),
                 SizedBox(
                   width: 20,
                 ),
                 FloatingActionButton(
-                    child: Icon(Icons.search), onPressed: () => {})
+                    child: Icon(Icons.history),
+                    onPressed: () =>
+                        Navigator.pushNamed(context, '/history_page'))
               ],
-            ),
-          ),
-          Card(
-            margin: EdgeInsets.all(10),
-            child: Row(
-              children: [Text('Activity'), Text('Activity2')],
             ),
           ),
           SizedBox(height: 24),
@@ -134,6 +140,32 @@ class _ActivityPageState extends State<ActivityPage> {
           buildButtons(context, activity),
         ],
       ),
+    );
+  }
+
+  Widget buildDropdown(BuildContext context) {
+    return DropdownButton<String>(
+      value: dropdownValue,
+      icon: const Icon(Icons.arrow_downward),
+      iconSize: 24,
+      elevation: 16,
+      style: const TextStyle(color: Colors.deepPurple),
+      underline: Container(
+        height: 2,
+        color: Colors.deepPurpleAccent,
+      ),
+      onChanged: (String? newValue) {
+        setState(() {
+          dropdownValue = newValue!;
+        });
+      },
+      items: <String>['Categories', 'HomeWork', 'Event', 'Bill']
+          .map<DropdownMenuItem<String>>((String value) {
+        return DropdownMenuItem<String>(
+          value: value,
+          child: Text(value),
+        );
+      }).toList(),
     );
   }
 
