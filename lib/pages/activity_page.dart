@@ -12,6 +12,8 @@ class ActivityPage extends StatefulWidget {
 }
 
 class _ActivityPageState extends State<ActivityPage> {
+  final searchController = TextEditingController();
+
   @override
   void dispose() {
     Hive.close();
@@ -54,13 +56,37 @@ class _ActivityPageState extends State<ActivityPage> {
     } else {
       return Column(
         children: [
-          SizedBox(height: 24),
-          Text(
-            'Last Time: ',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 20,
-              color: Colors.blue,
+          Container(
+            margin: EdgeInsets.all(20),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Container(
+                  height: 40,
+                  width: 160,
+                  child: TextField(
+                    controller: searchController,
+                    onChanged: (value) {
+                      setState(() {
+                        searchController.text = value;
+                      });
+                    },
+                    decoration: InputDecoration(
+                        border: OutlineInputBorder(), hintText: 'Search'),
+                  ),
+                ),
+                SizedBox(
+                  width: 20,
+                ),
+                FloatingActionButton(
+                    child: Icon(Icons.search), onPressed: () => {})
+              ],
+            ),
+          ),
+          Card(
+            margin: EdgeInsets.all(10),
+            child: Row(
+              children: [Text('Activity'), Text('Activity2')],
             ),
           ),
           SizedBox(height: 24),
@@ -96,7 +122,8 @@ class _ActivityPageState extends State<ActivityPage> {
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
         ),
         trailing: Text(
-          DateFormat('dd-MM-yyyy – kk:mm').format(activity.createdDate),
+          'CreateDate: ' +
+              DateFormat('dd-MM-yyyy – kk:mm').format(activity.createdDate),
           style: TextStyle(
               color: color, fontWeight: FontWeight.bold, fontSize: 16),
         ),
