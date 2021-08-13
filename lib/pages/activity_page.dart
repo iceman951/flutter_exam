@@ -77,7 +77,7 @@ class _ActivityPageState extends State<ActivityPage> {
             ],
           ),
         ),
-        Center(child: Text('No Avtivity', style: TextStyle(fontSize: 24)))
+        Center(child: Text('No Activity', style: TextStyle(fontSize: 24)))
       ]);
     } else {
       return Column(
