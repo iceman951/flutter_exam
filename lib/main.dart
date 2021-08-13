@@ -5,9 +5,13 @@ import 'package:flutter_exam_mid/pages/second_page.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
-void main() async {
+Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
+
+  // Hive.registerAdapter();
+  // await Hive.openBox<>('transactions');
+
   runApp(MyApp());
 }
 
